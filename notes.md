@@ -1,4 +1,5 @@
-# facedex
+# Local Face Tagging 
+
 This is a local version of Google Photos’ face tagging feature.  
 It organizes photos by the people in them — no internet or cloud required.
 

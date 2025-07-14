@@ -1,0 +1,18 @@
+STEPS:
+
+- read all the images form the folder 
+- detect and extract each face from the image 
+- make a database for the faces and the images that contain those faces 
+
+Done:
+
+- locate the faces in the images 
+- get the encoding for this faces 
+- compare this encoding 
+
+ToDo:
+
+- create a db for this encoding 
+- label this encoding 
+- remove similar encodings for the labels 
+- improve accuracy
