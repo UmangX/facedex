@@ -1,4 +1,5 @@
 # Byte-compiled / optimized / DLL files
+thumbnails
 .DS_STORE
 test_folder
 __pycache__/
