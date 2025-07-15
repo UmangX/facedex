@@ -1,5 +1,6 @@
-# facedex
-![facedex picture](https://github.com/umangx/facedex/blob/main/facedex.png?raw=true)
+<p align="center">
+  <img src="https://github.com/umangx/facedex/blob/main/facedex.png?raw=true" />
+</p>
 
 This is a local version of Google Photos’ face tagging feature.  
 It organizes photos by the people in them — no internet or cloud required.
