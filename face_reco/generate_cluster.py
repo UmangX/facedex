@@ -1,6 +1,6 @@
 import pickle
 import numpy as np
-from sklearn.cluster import DBSCAN
+import hdbscan
 
 # Load face encodings
 with open("face_data.pkl", "rb") as f:
@@ -9,19 +9,21 @@ with open("face_data.pkl", "rb") as f:
 # Extract encoding vectors
 encodings = np.array([record["face_encoding"] for record in face_data])
 
-# Apply DBSCAN clustering
-clustering = DBSCAN(eps=0.5, min_samples=2, metric='euclidean')
-labels = clustering.fit_predict(encodings)
+# Apply HDBSCAN clustering
+clusterer = hdbscan.HDBSCAN(min_cluster_size=2, metric='euclidean')
+labels = clusterer.fit_predict(encodings)
+probabilities = clusterer.probabilities_
 
-# Build database with encoding included
+# Build database with cluster and encoding info
 db_records = []
-for i, label in enumerate(labels):
+for i, (label, prob) in enumerate(zip(labels, probabilities)):
     entry = {
         "cluster_id": int(label),
         "label": "",  # Optional: assign later via GUI
         "file_name": face_data[i]["file_name"],
         "face_location": face_data[i]["face_location"],
-        "face_encoding": face_data[i]["face_encoding"].tolist()  # Convert ndarray to list for pickling or JSON
+        "face_encoding": face_data[i]["face_encoding"].tolist(),
+        "cluster_confidence": float(prob)  # Optional: for filtering weak assignments
     }
     db_records.append(entry)
 
