@@ -2,3 +2,4 @@ numpy
 face_recognition
 setuptools
 scikit-learn 
+hdbscan
