@@ -17,19 +17,18 @@ It organizes photos by the people in them — no internet or cloud required.
 
 ### Done
 
-- For single images:
-  - Locate faces
-  - Get face encodings
-  - Compare encodings to check similarity
+- generate encodings for faces in the given folder 
+- analyze the encodings for the faces and generate clusters using hdbscan 
+- extract faces from the images and generate thumbnails for each cluster 
+- combine this functions into single python script for further use in tauri/rust setup 
 
 ---
 
 ### To Do
 
-- Create a full database for face encodings
-- Add manual or automatic labels (e.g. "John", "Mom", etc.)
-- Remove duplicate/similar encodings per label
-- Improve face matching accuracy
+- use rust/tauri for making cross-platform desktop program 
+- label the thumbnails using frontend and group images based on encoding 
+- package this into single executable for use 
 
 ---
 
