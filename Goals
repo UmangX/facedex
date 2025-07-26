@@ -1,6 +1,6 @@
 STEPS:
 
-- read all the images form the folder 
+- read all the images from the folder 
 - detect and extract each face from the image 
 - make a database for the faces and the images that contain those faces 
 

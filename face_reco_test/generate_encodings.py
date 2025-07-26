@@ -1,41 +1,54 @@
-import pickle
-import face_recognition
-import numpy as np
-import sys
 import os
+import face_recognition
+import pickle
 
-if len(sys.argv) != 2:
-    print("Error: Provide a folder path for generating encodings.")
-    sys.exit(1)
+# 💼 Folder that holds all your images
+FOLDER_PATH = "./face_reco_test/test_folder"
+DB_FILE = "./face_reco_test/face_database.pkl"
 
-folder_path = sys.argv[1]
+# 🔐 This will hold all face data records
+face_database = []
 
-if __name__ == "__main__":
-    all_face_data = []
+print("🧠 Starting FaceDex Database Generation...\n")
 
-    for file_name in os.listdir(folder_path):
-        full_path = os.path.join(folder_path, file_name)
-        if not file_name.lower().endswith(('.png', '.jpg', '.jpeg','.HEIC')):
-            continue  # skip non-image files
-        try:
-            image = face_recognition.load_image_file(full_path)
-            face_locations = face_recognition.face_locations(image)
-            face_encodings = face_recognition.face_encodings(image, face_locations)
+for file_name in os.listdir(FOLDER_PATH):
+    image_path = os.path.join(FOLDER_PATH, file_name)
 
-            for loc, enc in zip(face_locations, face_encodings):
-                face_record = {
-                    "file_name": file_name,
-                    "face_location": loc,
-                    "face_encoding": enc
-                }
-                all_face_data.append(face_record)
+    # ⚠️ Skip non-image files
+    if not file_name.lower().endswith(('.jpg', '.jpeg', '.png', '.heic')):
+        continue
 
-            print(f"Processed {file_name}: {len(face_encodings)} face(s) found.")
-        except Exception as e:
-            print(f"Failed to process {file_name}: {e}")
+    try:
+        # 📸 Load the image
+        image = face_recognition.load_image_file(image_path)
 
-    # Save all encodings
-    with open("face_data.pkl", "wb") as f:
-        pickle.dump(all_face_data, f)
+        # 🔍 Find face locations and encodings
+        face_locations = face_recognition.face_locations(image, model="cnn")  # for better accuracy
+        face_encodings = face_recognition.face_encodings(image, face_locations)
 
-    print(f"\nSaved {len(all_face_data)} face encodings to face_data.pkl")
+        if not face_encodings:
+            print(f"😶 No face found in {file_name}")
+            continue
+
+        # 🏷️ Label: filename without extension (can improve later)
+        label = os.path.splitext(file_name)[0]
+
+        for encoding, loc in zip(face_encodings, face_locations):
+            face_record = {
+                "file_name": file_name,
+                "label": label,
+                "face_location": loc,
+                "face_encoding": encoding
+            }
+            face_database.append(face_record)
+
+        print(f"✅ Processed {file_name}: {len(face_encodings)} face(s) found.")
+
+    except Exception as e:
+        print(f"💥 Failed to process {file_name}: {e}")
+
+# 💾 Save to face_database.pkl
+with open(DB_FILE, "wb") as db_file:
+    pickle.dump(face_database, db_file)
+
+print(f"\n💽 Saved {len(face_database)} face records to {DB_FILE}")
